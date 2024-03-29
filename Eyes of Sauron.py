@@ -39,41 +39,12 @@ class Menu(discord.ui.View):
         self.value
         self.stop
 
-class DataView(View):
-    def __init__(self, options):
-        super().__init__()
-        self.add_item(Select(placeholder="Choose your peeps.", options=options))
-
 @bot.event
 async def on_ready():
     await bot.tree.sync()
     print("Wojiao Cork...")
     channel = bot.get_channel(CHANNEL_ID)
     await channel.send("Wojiao Cork....")
-
-@bot.tree.command(name="help")
-async def hello(interaction: discord.Interaction):
-    await interaction.response.send_message(f"Hey {interaction.user.mention}! This bot is created by the Ministry of Numbers with the purpose of having each database for users that has submitted their data to us for further studies. So far, about 100+ individuals have their data recorded and saved inside the database, The Eyes of Sauron.", ephemeral=True)
-
-@bot.tree.command(name="say")
-@app_commands.describe(thing_to_say = "What should I say?")
-async def say(interaction: discord.Interaction, thing_to_say: str):
-    await interaction.response.send_message(f"{interaction.user.name} said: '{thing_to_say}'")
-
-@bot.tree.command(name="data")
-async def data(interaction: discord.Interaction):
-    data = ["item1", "item2", "item3", "item4"]
-    formatted_data = "\n".join(data)
-    await interaction.response.send_message(f"Here is the data: \n ```{formatted_data}```")
-
-@bot.tree.command(name="ping", description="It wukk show the ping")
-async def ping(interaction : Interaction):
-    bot_latency = round(bot.latency*1000)
-    await interaction.response.send_message(f"Pong... {bot_latency}ms")
-
-@bot.command()
-async def hello(ctx):
-    await ctx.send("Database for Entrenched, Rojtar eyes only...")
 
 @bot.command()
 async def menu(ctx):
@@ -84,21 +55,65 @@ async def menu(ctx):
          url="https://discord.com/invite/edot", 
          emoji="<X_illyria:1018658471236861952>"))
      await ctx.reply("The watchful eyes", view=view)
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send("Database for Entrenched, Rojtar eyes only...")
+
+@bot.tree.command(name="help")
+async def hello(interaction: discord.Interaction):
+    await interaction.response.send_message(
+        f"Hey {interaction.user.mention}! This bot is created by the Ministry of Numbers with the purpose of having each database for users that has submitted their data to us for further studies. So far, about 100+ individuals have their data recorded and saved inside the database, The Eyes of Sauron.", ephemeral=True)
+
+@app_commands.command(name="list", description="A list of individuals that has been registered in the database")
+@app_commands.describe(list="Wanna know who's the real G?")
+@app_commands.choices(list=[
+    app_commands.Choice(name="Cruncher", value="1"),
+    app_commands.Choice(name="Dignity", value="2")
+])
+async def list_command(interaction: discord.Interaction, list: app_commands.Choice[int]):
+    await interaction.response.send_message(f"List selected: {list}")
+
+
+@bot.tree.command(name="watchlist", description="The Sauron has its eyes on these indiviaduals who has fallen prey.")
+async def watchlist(interaction: Interaction):
+    view = Menu()
+    view.add_item(discord.ui.Button(
+        label="Invite Link",
+        style=discord.ButtonStyle.link,
+        url="https://discord.com/invite/edot",
+        emoji="<X_illyria:1018658471236861952>"))
+    await interaction.response.send_message("The Watchful Eyes", view=view)
  
-@bot.tree.command(name="chosen", description="The best one")
-async def chosen(interaction : Interaction):
-        options=[
-            discord.SelectOption(
-                label="Crunchy", 
-                emoji=":cloudy:", 
-                description="Handsome man"),
-            discord.SelectOption(
-                label="Diggitty",
-                emoji=":target:", 
-                description="Recon Nation")
-        ]
-        view = DataView(options)
-        await interaction.response.send_message(f"Congratulations {interaction.user.mention}. The one you've chosen are...", view=view)
-        # I give up
+@bot.tree.command(name="cruncher", description="Details of Wojiao Cork")
+async def cruncher(interaction: Interaction):
+    embed = discord.Embed(
+        title="Crunchy Cork's Details",
+        description="Here are the details of Crunchy Cork:",
+        color=discord.Color.blurple()
+    )
+    embed.set_thumbnail(url="https://tr.rbxcdn.com/30DAY-AvatarHeadshot-D6A22B4D634F4B10E2939FF53CB2927A-Png/150/150/AvatarHeadshot/Png/noFilter")
+
+    embed.add_field(name="Username", value="[Crunchy_Cork](https://www.roblox.com/users/2313514417/profile)", inline=True)
+    embed.add_field(name="KPH", value="87.52", inline=True)
+    embed.add_field(name="Notes", value="This guy is so hawt, I am drooling looking at his handsome face.", inline=False)
+    embed.add_field(name="Affiliation", value="Eagles of Illyria", inline=True)
+    embed.add_field(name="Rank", value="155", inline=True)
+    embed.add_field(name="\u200b", value="\u200b", inline=True)
+    embed.add_field(name="Kills", value="84,458", inline=True)
+    embed.add_field(name="Hours", value="941", inline=True)
+    embed.add_field(name="\u200b", value="\u200b", inline=True)
+    embed.add_field(name="Normalised Stats", value="", inline=False)
+    embed.add_field(name="KPH", value="5.5", inline=True)
+    embed.add_field(name="Hours",value="7.85", inline=True)
+    embed.add_field(name="\u200b", value="\u200b", inline=True)
+    embed.add_field(name="Levels",value="8.05", inline=True)
+    embed.add_field(name="Kills",value="7.9", inline=True)
+    embed.add_field(name="\u200b", value="\u200b", inline=True)
+    embed.add_field(name="Data Acquired", value="11th September 2023", inline=False)
+    embed.set_image(url="https://cdn.discordapp.com/attachments/1216630854957404203/1222804174564233256/image.png?ex=66178c21&is=66051721&hm=9583937218b7018ae3de6cc81871640a3d1d194d67301058084fe75c25b5f5fe&")
+    embed.set_footer(text="Powered by the all powerful Eyes of Sauron")
+    
+    await interaction.response.send_message(embed=embed)
 
 bot.run(BOT_TOKEN)
