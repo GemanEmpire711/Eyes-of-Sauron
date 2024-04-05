@@ -1,7 +1,7 @@
-from discord.ext import commands
-from discord import app_commands
-from discord import Interaction
 import discord
+from discord import app_commands
+from discord.ext import commands
+from discord import Interaction
 from discord.ui import Select, View
 import config
 
@@ -65,14 +65,16 @@ async def hello(interaction: discord.Interaction):
     await interaction.response.send_message(
         f"Hey {interaction.user.mention}! This bot is created by the Ministry of Numbers with the purpose of having each database for users that has submitted their data to us for further studies. So far, about 100+ individuals have their data recorded and saved inside the database, The Eyes of Sauron.", ephemeral=True)
 
-@app_commands.command(name="list", description="A list of individuals that has been registered in the database")
-@app_commands.describe(list="Wanna know who's the real G?")
+@bot.tree.command(name="list", description="Database for several individuals in Entrenched.")
 @app_commands.choices(list=[
-    app_commands.Choice(name="Cruncher", value="1"),
-    app_commands.Choice(name="Dignity", value="2")
+    discord.app_commands.Choice(name="Cruncher", value=1),
+    discord.app_commands.Choice(name="Dignity", value=2)
 ])
-async def list_command(interaction: discord.Interaction, list: app_commands.Choice[int]):
-    await interaction.response.send_message(f"List selected: {list}")
+async def list(interaction: discord.Interaction, list: int):
+    if list == 1:
+        await cruncher(interaction)
+    elif list == 2:
+        await dignity(interaction)
 
 
 @bot.tree.command(name="watchlist", description="The Sauron has its eyes on these indiviaduals who has fallen prey.")
@@ -84,9 +86,8 @@ async def watchlist(interaction: Interaction):
         url="https://discord.com/invite/edot",
         emoji="<X_illyria:1018658471236861952>"))
     await interaction.response.send_message("The Watchful Eyes", view=view)
- 
-@bot.tree.command(name="cruncher", description="Details of Wojiao Cork")
-async def cruncher(interaction: Interaction):
+
+async def cruncher(interaction: discord.Interaction):
     embed = discord.Embed(
         title="Crunchy Cork's Details",
         description="Here are the details of Crunchy Cork:",
@@ -112,6 +113,36 @@ async def cruncher(interaction: Interaction):
     embed.add_field(name="\u200b", value="\u200b", inline=True)
     embed.add_field(name="Data Acquired", value="11th September 2023", inline=False)
     embed.set_image(url="https://cdn.discordapp.com/attachments/1216630854957404203/1222804174564233256/image.png?ex=66178c21&is=66051721&hm=9583937218b7018ae3de6cc81871640a3d1d194d67301058084fe75c25b5f5fe&")
+    embed.set_footer(text="Powered by the all powerful Eyes of Sauron")
+    
+    await interaction.response.send_message(embed=embed)
+
+async def dignity(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="Diggitty_Doggitty's Details",
+        description="Here are the details of Diggitty_Doggitty:",
+        color=discord.Color.blurple()
+    )
+    embed.set_thumbnail(url="https://tr.rbxcdn.com/30DAY-AvatarHeadshot-7915A349D9703F317AF187AF57494554-Png/150/150/AvatarHeadshot/Png/noFilter")
+
+    embed.add_field(name="Username", value="[Diggitty_Doggitty](https://www.roblox.com/users/28486290/profile)", inline=True)
+    embed.add_field(name="KPH", value="141", inline=True)
+    embed.add_field(name="Notes", value="hi yes hello 😨😨😳😭😳😓🥺😔😬😨💀😎😎😎", inline=False)
+    embed.add_field(name="Affiliation", value="Eagles of Illyria", inline=True)
+    embed.add_field(name="Rank", value="135", inline=True)
+    embed.add_field(name="\u200b", value="\u200b", inline=True)
+    embed.add_field(name="Kills", value="85,846", inline=True)
+    embed.add_field(name="Hours", value="613", inline=True)
+    embed.add_field(name="\u200b", value="\u200b", inline=True)
+    embed.add_field(name="Normalised Stats", value="", inline=False)
+    embed.add_field(name="KPH", value="8.15", inline=True)
+    embed.add_field(name="Hours",value="5.6", inline=True)
+    embed.add_field(name="\u200b", value="\u200b", inline=True)
+    embed.add_field(name="Levels",value="7.3", inline=True)
+    embed.add_field(name="Kills",value="8", inline=True)
+    embed.add_field(name="\u200b", value="\u200b", inline=True)
+    embed.add_field(name="Data Acquired", value="11th July 2023", inline=False)
+    embed.set_image(url="https://cdn.discordapp.com/attachments/1216630854957404203/1225715844475129856/image.png?ex=662223d6&is=660faed6&hm=086c7bf8a93087d70c6c1af27423fc084e3f1e778f537d4a64a606f2c2da2edf&")
     embed.set_footer(text="Powered by the all powerful Eyes of Sauron")
     
     await interaction.response.send_message(embed=embed)
